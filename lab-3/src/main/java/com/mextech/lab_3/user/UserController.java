@@ -2,7 +2,6 @@ package com.mextech.lab_3.user;
 
 import com.mextech.lab_3.user.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +37,8 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public User updateUser(@PathVariable("id") long id){
-        return userService.
+    public Optional<User> updateUser(@PathVariable("id") long id, @RequestBody User user){
+        return userService.updateUserById(id,user);
     }
 
 }

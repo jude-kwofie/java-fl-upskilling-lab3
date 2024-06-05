@@ -9,13 +9,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
 
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
+
     @Autowired
-    public UserServiceImp(UserRepository userRepository){
+    public UserServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     @Override
     public User createUser(User user) {
         return userRepository.save(user);
@@ -28,26 +30,25 @@ public class UserServiceImp implements UserService{
 
     @Override
     public List<UserResponseDto> getUsers() {
-        return userRepository.findAll().stream().map(user -> new UserResponseDto(user.getId(),user.getName())).collect(Collectors.toList());
-
+        return userRepository.findAll().stream()
+                .map(user -> new UserResponseDto(user.id(), user.name()))
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<User> updateUserById() {
-        return Optional.empty();
-    }
+
 
     @Override
-    public Optional<User> updateUserById(long userId,User user){
+    public Optional<User> updateUserById(long userId, User user) {
         Optional<User> foundUser = userRepository.findById(userId);
-        if(foundUser.isPresent()){
-            userRepository.(user);
-        }
+        foundUser.ifPresent(u -> {
+            userRepository.update(new User(u.id(), user.name()));
+        });
+        return foundUser;
     }
 
     @Override
     public void deleteUserById(long userId) {
-         userRepository.deleteById(userId);
+        userRepository.deleteById(userId);
     }
 
     @Override
